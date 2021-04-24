@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -11,6 +12,7 @@ import { addColumn, fetchSingleColumn, updateColumn } from '../../util/columnsAp
 export default function ColumnModal(props) {
   const [currentColumn, setCurrentColumn] = useState({});
   const [validated, setValidated] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [state, dispatch] = useContext(DataContext);
   const formRef = useRef(); //Szükséges, mivel a save button nem a form része, így azon hívva a save-et az event-ből nem kapnánk referenciát a formra => validáció eltörne
 
@@ -26,33 +28,55 @@ export default function ColumnModal(props) {
   const handleTitleChange = (event) =>
     setCurrentColumn({ ...currentColumn, title: event.target.value });
 
-  const handleSaveOnBackend = async (column) => {
-    const id = currentColumn.id;
-    let newColumns;
-    if (currentColumn.id) {
-      await updateColumn(currentColumn);
-      const newCol = await fetchSingleColumn(id);
-      newColumns = state.columns.map((col) => (col.id === id ? newCol : col));
-    } else {
-      const newCol = await addColumn(column);
-      newColumns = [...state.columns, newCol];
+  const createColumn = async () => {
+    const newCol = await addColumn(currentColumn);
+    if(newCol === null){
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
+      return null;
     }
+    else return [...state.columns, newCol];
+  }
+  
+  const modifyColumn = async () => {
+    const id = currentColumn.id;
+    if(!await updateColumn(currentColumn)){
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
+      return null;
+    }
+    else{
+      const newCol = await fetchSingleColumn(id);
+      return state.columns.map((col) => (col.id === id ? newCol : col));
+    }
+  }
 
+  const handleSaveOnBackend = async () => {
+    let newColumns;
+    if (currentColumn.id) newColumns = await modifyColumn();
+    else newColumns = await createColumn();
+
+    let isSuccess = true
+    if(newColumns === null){
+      isSuccess = false;
+      newColumns = state.columns;
+    }
+    
     dispatch({
       type: 'UPDATE_COLUMNS',
       payload: {
         columns: newColumns,
       },
     });
+    return isSuccess;
   };
 
   const save = async (event) => {
     event.preventDefault();
     setValidated(true);
     const form = formRef.current;
-    if (form.checkValidity()) {
+    if (form.checkValidity() && await handleSaveOnBackend()) {
       props.hide();
-      await handleSaveOnBackend(currentColumn);
       setValidated(false);
     }
   };
@@ -84,6 +108,7 @@ export default function ColumnModal(props) {
             </Col>
           </Form.Group>
         </Form>
+        <Alert show={showAlert} variant='warning'>A column with this name alreay exists.</Alert>
       </Modal.Body>
       <Modal.Footer>
         <Button variant='secondary' onClick={props.hide}>

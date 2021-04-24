@@ -1,6 +1,5 @@
 import baseUrl from './baseUrl';
 
-//COLUMNS
 
 export async function fetchColumns() {
   const response = await fetch(`${baseUrl}/columns`);
@@ -20,17 +19,18 @@ export async function addColumn(column) {
     },
     body: JSON.stringify(column),
   });
-  return response.json();
+  return response.status === 409 ? null : response.json();
 }
 
 export async function updateColumn(column) {
-  await fetch(`${baseUrl}/columns/${column.id}`, {
+  const response = await fetch(`${baseUrl}/columns/${column.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(column),
   });
+  return response.status === 409 ? false : true;
 }
 
 export async function deleteColumn(columnId) {
@@ -38,7 +38,3 @@ export async function deleteColumn(columnId) {
     method: 'DELETE',
   });
 }
-
-//TODOS
-
-

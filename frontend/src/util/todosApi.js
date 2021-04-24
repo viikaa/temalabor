@@ -25,17 +25,18 @@ export async function fetchTodos(colId) {
       },
       body: JSON.stringify(todo),
     });
-    return response.json();
+    return response.status === 409 ? null : response.json();
   }
   
   export async function updateTodo(todo) {
-    fetch(`${baseUrl}/todos/${todo.id}`, {
+    const response = await fetch(`${baseUrl}/todos/${todo.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(todo),
     });
+    return response.status === 409 ? false : true;
   }
   
   export async function deleteTodo(todoId) {

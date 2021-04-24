@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -11,7 +12,8 @@ import { addTodo, fetchSingleTodo, updateTodo } from '../../util/todosApi';
 export default function TodoModal(props) {
   const [state, dispatch] = useContext(DataContext);
   const [validated, setValidated] = useState(false);
-  const [currentTodo, setCurrentTodo] = useState({}); //ESlint miatt
+  const [showAlert, setShowAlert] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState({}); 
 
   //Szükséges, mivel a save button nem a form része, így azon hívva a save-et az event-ből nem kapnánk referenciát a formra => validáció eltörne
   const formRef = useRef();
@@ -48,31 +50,54 @@ export default function TodoModal(props) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
+  const createTodo = async () => {
+    const newTodo = await addTodo(currentTodo);
+      if(newTodo === null){
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000);
+        return null;
+      }
+      else return [...state.todos, newTodo];
+  }
+
+  const modifyTodo = async () => {
+    if(!await updateTodo(currentTodo)){
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
+      return null;
+    }
+    else{
+      const newTodo = await fetchSingleTodo(currentTodo.id);
+      return state.todos.map((t) => (t.id === newTodo.id ? newTodo : t));
+    }
+  }
+
   const handleSaveOnBackend = async () => {
     let newTodos;
-    if (currentTodo.id) {
-      await updateTodo(currentTodo);
-      const newTodo = await fetchSingleTodo(currentTodo.id);
-      newTodos = state.todos.map((t) => (t.id === newTodo.id ? newTodo : t));
-    } else {
-      const newTodo = await addTodo(currentTodo);
-      newTodos = [...state.todos, newTodo];
+    if (currentTodo.id) newTodos = await modifyTodo();
+    else newTodos = await createTodo();
+
+    let isSuccess = true
+    if(newTodos === null){
+      isSuccess = false;
+      newTodos = state.todos;
     }
+
     dispatch({
       type: 'UPDATE_TODOS',
       payload: {
         todos: newTodos,
       },
     });
+    return isSuccess;
   };
 
   const save = async (event) => {
     event.preventDefault();
     setValidated(true);
     const form = formRef.current;
-    if (form.checkValidity()) {
+    if (form.checkValidity() && await handleSaveOnBackend()) {
       props.hide();
-      await handleSaveOnBackend();
       setValidated(false);
     }
   };
@@ -168,6 +193,7 @@ export default function TodoModal(props) {
               ''
             )}
           </Form>
+          <Alert variant='warning' show={showAlert}>A todo with this name already exists with this title.</Alert>
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={props.hide}>
