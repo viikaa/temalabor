@@ -47,6 +47,10 @@ namespace Todo.API.Controllers
         {
             if (!(await TodoService.IsValidRequestBody(todo)))
                 return BadRequest();
+
+            if (!(await TodoService.IsTodoUniqueInColumn(todo)))
+                return Conflict();
+
             var createdTodo = await TodoService.InsertTodoAsync(todo);
             return CreatedAtAction(
                 nameof(GetSingleTodo),
@@ -60,6 +64,10 @@ namespace Todo.API.Controllers
         {
             if (!(await TodoService.IsValidRequestBody(todo, id)))
                 return BadRequest();
+
+            if (!(await TodoService.IsTodoUniqueInColumn(todo)))
+                return Conflict();
+
             await TodoService.UpdateTodoAsync(todo, id);
             return NoContent();
         }

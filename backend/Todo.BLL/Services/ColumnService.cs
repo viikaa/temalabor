@@ -17,6 +17,7 @@ namespace Todo.BLL.Services
         Task UpdateColumnAsync(int Id, Column column);
         Task DeleteColumnAsync(int Id);
         Task<bool> IsValidRequestBody(Column column, int? Id = null);
+        Task<bool> IsColumnUnique(Column column);
     }
     public class ColumnService : IColumnService
     {
@@ -66,10 +67,13 @@ namespace Todo.BLL.Services
         {
             var isIdCorrect = column.Id == Id;
             var doesIdExist = column.Id == null || await _context.Columns.AnyAsync(c => c.Id == column.Id);
-            var isColumnUnique = !(await _context.Columns.AnyAsync(c => c.Title == column.Title && c.Id != column.Id));
 
-            return isIdCorrect && doesIdExist && isColumnUnique;
+            return isIdCorrect && doesIdExist;
 
         }
+
+        public async Task<bool> IsColumnUnique(Column column) 
+            => !await _context.Columns.AnyAsync(c => c.Title == column.Title &&
+                                                c.Id != column.Id);
     }
 }

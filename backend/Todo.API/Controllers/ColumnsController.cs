@@ -45,6 +45,8 @@ namespace Todo.API.Controllers
         {
             if (!(await ColumnService.IsValidRequestBody(column)))
                 return BadRequest();
+            if (!await ColumnService.IsColumnUnique(column))
+                return Conflict();
 
             var createdColumn = await ColumnService.InsertColumnAsync(column);
             return CreatedAtAction(
@@ -59,6 +61,8 @@ namespace Todo.API.Controllers
         {
             if (!(await ColumnService.IsValidRequestBody(column, id)))
                 return BadRequest();
+            if (!await ColumnService.IsColumnUnique(column))
+                return Conflict();
 
             await ColumnService.UpdateColumnAsync(id, column);
             return NoContent();

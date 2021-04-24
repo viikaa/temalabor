@@ -18,6 +18,7 @@ namespace Todo.BLL.Services
         Task UpdateTodoAsync(Todo todo, int Id);
         Task DeleteTodoAsync(int Id);
         Task<bool> IsValidRequestBody(Todo todo, int? Id = null);
+        Task<bool> IsTodoUniqueInColumn(Todo todo);
     }
     public class TodoService : ITodoService
     {
@@ -101,14 +102,17 @@ namespace Todo.BLL.Services
             var isPriorityPositive = todo.Priority >= 0;
             var isDeadlineInCorrectFormat = DateTime.TryParseExact(todo.Deadline, "yyyy-MM-ddTHH:mm", null, DateTimeStyles.None, out _);
             var doesColumnExist = await _context.Columns.AnyAsync(c => c.Id == todo.ColumnId);
-            var isTitleUniqueInColumn = !(await _context.Todos.AnyAsync(t => t.Title == todo.Title && t.ColumnId == todo.ColumnId && t.Id != todo.Id));
 
             return isIdCorrect &&
                    doesIdExist &&
                    isPriorityPositive &&
                    isDeadlineInCorrectFormat &&
-                   doesColumnExist &&
-                   isTitleUniqueInColumn;
+                   doesColumnExist;
         }
+
+        public async Task<bool> IsTodoUniqueInColumn(Todo todo)
+            => !await _context.Todos.AnyAsync(t => t.Title == todo.Title &&
+                                              t.ColumnId == todo.ColumnId &&
+                                              t.Id != todo.Id);
     }
 }

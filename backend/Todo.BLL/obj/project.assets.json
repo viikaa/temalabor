@@ -5724,11 +5724,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.BLL\\Todo.BLL.csproj",
+      "projectUniqueName": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.BLL\\Todo.BLL.csproj",
       "projectName": "Todo.BLL",
-      "projectPath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.BLL\\Todo.BLL.csproj",
+      "projectPath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.BLL\\Todo.BLL.csproj",
       "packagesPath": "C:\\Users\\Viktor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.BLL\\obj\\",
+      "outputPath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.BLL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Viktor\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5745,8 +5745,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.Data\\Todo.DAL.csproj": {
-              "projectPath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.Data\\Todo.DAL.csproj"
+            "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.Data\\Todo.DAL.csproj": {
+              "projectPath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.Data\\Todo.DAL.csproj"
             }
           }
         }

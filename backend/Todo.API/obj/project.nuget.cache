@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "E5GVJAz25hX3BMAMIdtv7kiH0+7PfIir+8GBqJgVovQEisAFqb2z34jm97fGtZT4uPCeq56pSauvmQe+VZRa1g==",
+  "dgSpecHash": "ZxlMF94SI8+5XbdrZfb0HO2fOeF3LHcKrqJu1Mr9HKna1fl/0TSyIBzOr/XNceEUjPijgsioJSMi4kwR3dPzDg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.API\\Todo.API.csproj",
+  "projectFilePath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.API\\Todo.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Viktor\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

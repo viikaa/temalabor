@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QSP27h5CcQm5usUezGUB6iGqvLRyER3ZOQ5XZ6esLvuNf3a5g9LEZsX1SbgjSuJnjAXJyoH5wdzWHmSY0C6t6Q==",
+  "dgSpecHash": "7yfWfNYe5ADe/GDNMEVl30q+NXmELylhAzKBvW4TYL0bMjb8kfYa3mceDwhyLysLXI2DT1E01lw/R61hAWT0zA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\backend\\Todo.Data\\Todo.DAL.csproj",
+  "projectFilePath": "C:\\Users\\Viktor\\Desktop\\BProf\\4.félév\\témalab\\témalab végső\\backend\\Todo.Data\\Todo.DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",
