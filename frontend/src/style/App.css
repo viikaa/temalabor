@@ -1,0 +1,96 @@
+.App {
+  text-align: center;
+}
+
+html,
+body,
+#root,
+.App {
+  height: 100%;
+}
+
+/*CARD*/
+
+.card {
+  background-color: #343a40;
+  color: lightgray;
+  border-radius: 0.5rem !important;
+}
+
+.card-body {
+  border-radius: inherit;
+}
+
+/*TODO-PLACEHOLDER*/
+
+.todo-placeholder {
+  border-style: dashed !important;
+  border-width: 0.15rem !important;
+  color: lightgray !important;
+  border-color: lightgray !important;
+}
+
+.todo-placeholder:hover {
+  border-style: dashed !important;
+  border-width: 0.15rem !important;
+  color: white !important;
+  border-color: white !important;
+  background-color: transparent !important;
+}
+
+.todo-placeholder:focus {
+  box-shadow: none !important;
+}
+
+/*COLUMN-PLACEHOLDER*/
+
+.column-placeholder {
+  background-color: transparent !important;
+  color: rgb(70, 70, 70) !important;
+  border-style: dashed !important;
+  border-color: rgb(70, 70, 70) !important;
+  border-width: 0.15rem !important;
+  height: 200px;
+}
+
+.column-placeholder:hover {
+  border-style: dashed !important;
+  border-width: 0.15rem !important;
+  color: rgb(150, 150, 150) !important;
+  border-color: rgb(150, 150, 150) !important;
+  background-color: transparent !important;
+}
+
+/* TODO */
+
+.todo {
+  box-shadow: rgb(0 0 0 / 75%) 1px 1px 2px 0px;
+}
+
+.todo,
+.todo:hover {
+  transition: none !important;
+}
+
+.todo:focus {
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+/**/
+.icon {
+  color: lightgray;
+  cursor: pointer;
+}
+
+.todo .icon {
+  color: white;
+}
+
+.edit-icon:hover {
+  color: yellowgreen;
+}
+
+.delete-icon:hover {
+  color: tomato;
+}
