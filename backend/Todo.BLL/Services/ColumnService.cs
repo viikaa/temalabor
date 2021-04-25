@@ -66,9 +66,9 @@ namespace Todo.BLL.Services
         public async Task<bool> IsValidRequestBody(Column column, int? Id = null)
         {
             var isIdCorrect = column.Id == Id;
-            var doesIdExist = column.Id == null || await _context.Columns.AnyAsync(c => c.Id == column.Id);
+            var doesIdExistIfNotNull = column.Id == null || await _context.Columns.AnyAsync(c => c.Id == column.Id);
 
-            return isIdCorrect && doesIdExist;
+            return isIdCorrect && doesIdExistIfNotNull;
 
         }
 

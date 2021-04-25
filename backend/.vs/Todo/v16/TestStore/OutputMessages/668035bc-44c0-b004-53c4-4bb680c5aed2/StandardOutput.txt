@@ -1,0 +1,61 @@
+info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
+      Entity Framework Core 5.0.5 initialized 'TodoDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: None
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      CREATE TABLE "Columns" (
+          "Id" INTEGER NOT NULL CONSTRAINT "PK_Columns" PRIMARY KEY AUTOINCREMENT,
+          "Title" TEXT NULL
+      );
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      CREATE TABLE "Todos" (
+          "Id" INTEGER NOT NULL CONSTRAINT "PK_Todos" PRIMARY KEY AUTOINCREMENT,
+          "Title" TEXT NULL,
+          "Description" TEXT NULL,
+          "Priority" INTEGER NOT NULL,
+          "ColumnId" INTEGER NOT NULL,
+          "Deadline" TEXT NOT NULL,
+          CONSTRAINT "FK_Todos_Columns_ColumnId" FOREIGN KEY ("ColumnId") REFERENCES "Columns" ("Id") ON DELETE CASCADE
+      );
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      CREATE INDEX "IX_Todos_ColumnId" ON "Todos" ("ColumnId");
+info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
+      Entity Framework Core 5.0.5 initialized 'TodoDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: None
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?' (Size = 7)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Columns" ("Id", "Title")
+      VALUES (@p0, @p1);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?' (Size = 7)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Columns" ("Id", "Title")
+      VALUES (@p0, @p1);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?' (Size = 7)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Columns" ("Id", "Title")
+      VALUES (@p0, @p1);
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 PUT http://localhost/api/columns/1 application/json;+charset=utf-8 26
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Todo.API.Controllers.ColumnsController.Put (Todo.API)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[3]
+      Route matched with {action = "Put", controller = "Columns"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Put(Int32, Todo.BLL.Column) on controller Todo.API.Controllers.ColumnsController (Todo.API).
+info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
+      Entity Framework Core 5.0.5 initialized 'TodoDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: None
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__column_Id_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Columns" AS "c"
+          WHERE "c"."Id" = @__column_Id_0)
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[2]
+      Executed action Todo.API.Controllers.ColumnsController.Put (Todo.API) in 4.0886ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Todo.API.Controllers.ColumnsController.Put (Todo.API)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 PUT http://localhost/api/columns/1 application/json;+charset=utf-8 26 - 400 - application/problem+json;+charset=utf-8 11.0941ms

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.BLL", "Todo.BLL\Todo.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.DAL", "Todo.Data\Todo.DAL.csproj", "{4D78F8E7-9CDC-40B9-BA9D-D773B2A84865}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.Test", "Todo.Test\Todo.Test.csproj", "{FE644F57-37FF-4304-9D7B-ADE0B7DC22C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4D78F8E7-9CDC-40B9-BA9D-D773B2A84865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D78F8E7-9CDC-40B9-BA9D-D773B2A84865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D78F8E7-9CDC-40B9-BA9D-D773B2A84865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE644F57-37FF-4304-9D7B-ADE0B7DC22C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE644F57-37FF-4304-9D7B-ADE0B7DC22C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE644F57-37FF-4304-9D7B-ADE0B7DC22C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE644F57-37FF-4304-9D7B-ADE0B7DC22C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

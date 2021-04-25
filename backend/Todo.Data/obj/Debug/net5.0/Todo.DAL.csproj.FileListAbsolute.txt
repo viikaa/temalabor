@@ -10,3 +10,15 @@ C:\Users\Viktor\Desktop\BProf\4.félév\témalab\backend\Todo.Data\obj\Debug\net
 C:\Users\Viktor\Desktop\BProf\4.félév\témalab\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.dll
 C:\Users\Viktor\Desktop\BProf\4.félév\témalab\backend\Todo.Data\obj\Debug\net5.0\ref\Todo.DAL.dll
 C:\Users\Viktor\Desktop\BProf\4.félév\témalab\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.pdb
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\bin\Debug\net5.0\Todo.DAL.deps.json
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\bin\Debug\net5.0\Todo.DAL.dll
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\bin\Debug\net5.0\ref\Todo.DAL.dll
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\bin\Debug\net5.0\Todo.DAL.pdb
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.csprojAssemblyReference.cache
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.AssemblyInfoInputs.cache
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.AssemblyInfo.cs
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.dll
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\ref\Todo.DAL.dll
+C:\Users\Viktor\Desktop\BProf\4.félév\témalab\témalab végső\backend\Todo.Data\obj\Debug\net5.0\Todo.DAL.pdb
