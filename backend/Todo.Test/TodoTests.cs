@@ -107,5 +107,41 @@ namespace Todo.Test
                 CollectionAssert.AreEquivalent(TestTodos, actualEntities);
             }
         }
+
+        [TestMethod]
+        public async Task GetSingleTodoWhenDoesNotExist()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                var client = testScope.CreateClient();
+
+                int id = 4;
+                var response = await client.GetAsync($"/api/todos/{id}");
+
+                Assert.AreEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetSingleTodoWhenExists()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                int id = 1;
+                var client = testScope.CreateClient();
+                var response = await client.GetAsync($"/api/todos/{id}");
+
+                response.EnsureSuccessStatusCode();
+                var actual = await response.Content.ReadFromJsonAsync<BLL.Todo>();
+                var actualEntity = mapDtoToEntity(actual);
+
+                Assert.IsNotNull(actual);
+                Assert.AreEqual(TestTodos.Single(t => t.Id == id), actualEntity);
+            }
+        }
     }
 }

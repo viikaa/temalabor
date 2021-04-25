@@ -98,13 +98,13 @@ namespace Todo.BLL.Services
         public async Task<bool> IsValidRequestBody(Todo todo, int? Id = null)
         {
             var isIdCorrect = todo.Id == Id;
-            var doesIdExist = todo.Id == null || await _context.Todos.AnyAsync(t => t.Id == todo.Id);
+            var doesIdExistIfNotNull = todo.Id == null || await _context.Todos.AnyAsync(t => t.Id == todo.Id);
             var isPriorityPositive = todo.Priority >= 0;
             var isDeadlineInCorrectFormat = DateTime.TryParseExact(todo.Deadline, "yyyy-MM-ddTHH:mm", null, DateTimeStyles.None, out _);
             var doesColumnExist = await _context.Columns.AnyAsync(c => c.Id == todo.ColumnId);
 
             return isIdCorrect &&
-                   doesIdExist &&
+                   doesIdExistIfNotNull &&
                    isPriorityPositive &&
                    isDeadlineInCorrectFormat &&
                    doesColumnExist;

@@ -1,7 +1,7 @@
 info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
       Entity Framework Core 5.0.5 initialized 'TodoDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: None
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
       SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
@@ -56,14 +56,14 @@ info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[3]
 info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
       Entity Framework Core 5.0.5 initialized 'TodoDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: None
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
       SELECT "t"."Id", "t"."Title", "t"."Description", "t"."Deadline", "t"."Priority", "t"."ColumnId"
       FROM "Todos" AS "t"
 info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
       Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Todo.BLL.Todo, Todo.BLL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
 info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[2]
-      Executed action Todo.API.Controllers.TodosController.GetTodos (Todo.API) in 338.449ms
+      Executed action Todo.API.Controllers.TodosController.GetTodos (Todo.API) in 289.2858ms
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'Todo.API.Controllers.TodosController.GetTodos (Todo.API)'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/1.1 GET http://localhost/api/todos - - - 200 - application/json;+charset=utf-8 402.8011ms
+      Request finished HTTP/1.1 GET http://localhost/api/todos - - - 200 - application/json;+charset=utf-8 351.5657ms
