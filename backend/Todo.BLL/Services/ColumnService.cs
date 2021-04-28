@@ -15,7 +15,7 @@ namespace Todo.BLL.Services
         Task<Column> GetSingleColumnAsync(int Id);
         Task<Column> InsertColumnAsync(Column column);
         Task UpdateColumnAsync(int Id, Column column);
-        Task DeleteColumnAsync(int Id);
+        Task<bool> DeleteColumnAsync(int Id);
         Task<bool> IsValidRequestBody(Column column, int? Id = null);
         Task<bool> IsColumnUnique(Column column);
     }
@@ -39,7 +39,7 @@ namespace Todo.BLL.Services
             return await _context.Columns
                 .Where(c => c.Id == Id)
                 .Select(c => new Column(c.Id, c.Title))
-                .SingleAsync();
+                .SingleOrDefaultAsync();
         }
 
         public async Task<Column> InsertColumnAsync(Column column)
@@ -57,10 +57,20 @@ namespace Todo.BLL.Services
             entry.State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
-        public async Task DeleteColumnAsync(int Id)
+        public async Task<bool> DeleteColumnAsync(int Id)
         {
             _context.Columns.Remove(new DAL.Column { Id = Id });
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e) when (
+                e is DbUpdateConcurrencyException ||
+                e is DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> IsValidRequestBody(Column column, int? Id = null)

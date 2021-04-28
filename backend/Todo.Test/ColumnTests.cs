@@ -17,10 +17,10 @@ namespace Todo.Test
             new DAL.Column { Id = 3, Title = "Column3" }
         };
 
-        private BLL.Column mapEntityToDto(DAL.Column entity) 
+        private static BLL.Column MapEntityToDto(DAL.Column entity) 
             => new BLL.Column(entity.Id, entity.Title);
 
-        private DAL.Column mapDtoToEntity(BLL.Column dto)
+        private static DAL.Column MapDtoToEntity(BLL.Column dto)
             => new DAL.Column { Id = dto.Id ?? 0, Title = dto.Title };
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Todo.Test
                 DAL.Column[] actualEntities = new DAL.Column[TestColumns.Length];
                 for (int i = 0; i < TestColumns.Length; i++)
                 {
-                    actualEntities[i] = mapDtoToEntity(actual[i]);
+                    actualEntities[i] = MapDtoToEntity(actual[i]);
                 }
 
                 Assert.IsNotNull(actual);
@@ -63,6 +63,8 @@ namespace Todo.Test
             }
         }
 
+        
+
         [TestMethod]
         public async Task GetSingleColumnWhenExists()
         {
@@ -75,7 +77,7 @@ namespace Todo.Test
 
                 response.EnsureSuccessStatusCode();
                 var actual = await response.Content.ReadFromJsonAsync<BLL.Column>();
-                var actualEntity = mapDtoToEntity(actual);
+                var actualEntity = MapDtoToEntity(actual);
 
                 Assert.IsNotNull(actual);
                 Assert.AreEqual(TestColumns.Single(tc => tc.Id == id), actualEntity);
@@ -139,7 +141,7 @@ namespace Todo.Test
                 Assert.IsNotNull(response);
                 Assert.AreEqual(System.Net.HttpStatusCode.Created, response.StatusCode);
                 Assert.IsNotNull(responseBody);
-                Assert.AreEqual(insertedColumn, mapDtoToEntity(responseBody));
+                Assert.AreEqual(insertedColumn, MapDtoToEntity(responseBody));
             }
         }
 
@@ -218,7 +220,7 @@ namespace Todo.Test
 
                 Assert.IsNotNull(response);
                 Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode);
-                Assert.AreEqual(update, mapEntityToDto(updatedColumn));
+                Assert.AreEqual(update, MapEntityToDto(updatedColumn));
             }
         }
 
@@ -233,7 +235,7 @@ namespace Todo.Test
                 var response = await client.DeleteAsync("/api/columns/4");
 
                 Assert.IsNotNull(response);
-                Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+                Assert.AreEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
             }
         }
 

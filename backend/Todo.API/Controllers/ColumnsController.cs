@@ -31,11 +31,17 @@ namespace Todo.API.Controllers
         {
             try
             {
-                return await ColumnService.GetSingleColumnAsync(id);
+                var column = await ColumnService.GetSingleColumnAsync(id);
+                return column != null ? column : NotFound();
             }
-            catch (Exception)
+            catch (Exception e) 
             {
-                return NotFound();
+                if(e is ArgumentNullException)
+                    return Problem("Database not found", null, 500);
+                if (e is InvalidOperationException)
+                    return Problem("There is more than one column with the given id.", null, 500);
+                else
+                    return Problem("Database error", null, 500);
             }
         }
 
@@ -72,15 +78,11 @@ namespace Todo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await ColumnService.DeleteColumnAsync(id);
+            if(await ColumnService.DeleteColumnAsync(id))
                 return NoContent();
-            }
-            catch (Exception)
-            {
-                return NoContent();
-            }
+            else
+                return Problem("Column with the given id does not exist, or could not be deleted",
+                    null, 404);
         }
     }
 }

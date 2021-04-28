@@ -32,11 +32,17 @@ namespace Todo.API.Controllers
         {
             try
             {
-                return await TodoService.GetSingleTodoAsync(id);
+                var todo = await TodoService.GetSingleTodoAsync(id);
+                return todo != null ? todo : NotFound();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                if (e is ArgumentNullException)
+                    return Problem("Database not found", null, 500);
+                if (e is InvalidOperationException)
+                    return Problem("There is more than one todo with the given id.", null, 500);
+                else
+                    return Problem("Database error", null, 500);
             }
 
         }
@@ -76,15 +82,11 @@ namespace Todo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await TodoService.DeleteTodoAsync(id);
+            if (await TodoService.DeleteTodoAsync(id))
                 return NoContent();
-            }
-            catch (Exception)
-            {
-                return NoContent();
-            }
+            else
+                return Problem("Todo with the given id does not exist, or could not be deleted",
+                    null, 404);
         }
     }
 }

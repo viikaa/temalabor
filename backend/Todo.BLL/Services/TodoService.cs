@@ -16,7 +16,7 @@ namespace Todo.BLL.Services
         Task<Todo> GetSingleTodoAsync(int Id);
         Task<Todo> InsertTodoAsync(Todo todo);
         Task UpdateTodoAsync(Todo todo, int Id);
-        Task DeleteTodoAsync(int Id);
+        Task<bool> DeleteTodoAsync(int Id);
         Task<bool> IsValidRequestBody(Todo todo, int? Id = null);
         Task<bool> IsTodoUniqueInColumn(Todo todo);
     }
@@ -55,7 +55,7 @@ namespace Todo.BLL.Services
                     t.Deadline.ToString("yyyy-MM-ddTHH:mm", null),
                     t.Priority,
                     t.ColumnId))
-                .SingleAsync();
+                .SingleOrDefaultAsync();
         }
 
         public async Task<Todo> InsertTodoAsync(Todo todo)
@@ -89,10 +89,20 @@ namespace Todo.BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteTodoAsync(int Id)
+        public async Task<bool> DeleteTodoAsync(int Id)
         {
             _context.Todos.Remove(new DAL.Todo { Id = Id });
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e) when (
+                e is DbUpdateConcurrencyException ||
+                e is DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> IsValidRequestBody(Todo todo, int? Id = null)

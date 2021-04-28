@@ -48,7 +48,7 @@ namespace Todo.Test
             }
         };
 
-        private BLL.Todo mapEntityToDto(DAL.Todo entity)
+        private static BLL.Todo MapEntityToDto(DAL.Todo entity)
             => new BLL.Todo(
                 entity.Id,
                 entity.Title,
@@ -57,7 +57,7 @@ namespace Todo.Test
                 entity.Priority,
                 entity.ColumnId);
 
-        private DAL.Todo mapDtoToEntity(BLL.Todo dto)
+        private static DAL.Todo MapDtoToEntity(BLL.Todo dto)
             => new DAL.Todo 
             {
                 Id = dto.Id ?? 0,
@@ -100,7 +100,7 @@ namespace Todo.Test
                 DAL.Todo[] actualEntities = new DAL.Todo[TestTodos.Length];
                 for (int i = 0; i < TestTodos.Length; i++)
                 {
-                    actualEntities[i] = mapDtoToEntity(actual[i]);
+                    actualEntities[i] = MapDtoToEntity(actual[i]);
                 }
 
                 Assert.IsNotNull(actual);
@@ -137,7 +137,7 @@ namespace Todo.Test
 
                 response.EnsureSuccessStatusCode();
                 var actual = await response.Content.ReadFromJsonAsync<BLL.Todo>();
-                var actualEntity = mapDtoToEntity(actual);
+                var actualEntity = MapDtoToEntity(actual);
 
                 Assert.IsNotNull(actual);
                 Assert.AreEqual(TestTodos.Single(t => t.Id == id), actualEntity);
