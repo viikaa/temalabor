@@ -37,11 +37,11 @@ namespace Todo.API.Controllers
             catch (Exception e) 
             {
                 if(e is ArgumentNullException)
-                    return Problem("Database not found", null, 500);
+                    return Problem("Database not found", statusCode:500);
                 if (e is InvalidOperationException)
-                    return Problem("There is more than one column with the given id.", null, 500);
+                    return Problem("There is more than one column with the given id.", statusCode:500);
                 else
-                    return Problem("Database error", null, 500);
+                    return Problem(statusCode:500);
             }
         }
 
