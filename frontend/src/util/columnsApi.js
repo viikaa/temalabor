@@ -19,7 +19,7 @@ export async function addColumn(column) {
     },
     body: JSON.stringify(column),
   });
-  return response.status === 409 ? null : response.json();
+  return response.status === 409 ? null : await response.json();
 }
 
 export async function updateColumn(column) {

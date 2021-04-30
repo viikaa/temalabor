@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Todo.DAL;
 using System.Globalization;
@@ -12,7 +10,7 @@ namespace Todo.BLL.Services
 {
     public interface ITodoService
     {
-        Task<List<Todo>> GetTodosAsync(int? columnId);
+        Task<List<Todo>> GetTodosAsync();
         Task<Todo> GetSingleTodoAsync(int Id);
         Task<Todo> InsertTodoAsync(Todo todo);
         Task UpdateTodoAsync(Todo todo, int Id);
@@ -28,12 +26,11 @@ namespace Todo.BLL.Services
             _context = context;
         }
 
-        public async Task<List<Todo>> GetTodosAsync(int? columnId)
+        public async Task<List<Todo>> GetTodosAsync()
         {
             var todos = _context.Todos.AsQueryable();
-            if (columnId != null)
-                todos = todos.Where(t => t.ColumnId == columnId);
             return await todos
+                .OrderBy(t => t.Priority)
                 .Select(t => new Todo(
                     t.Id,
                     t.Title,

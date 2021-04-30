@@ -23,8 +23,8 @@ namespace Todo.API.Controllers
 
         // GET: api/<TodosController>
         [HttpGet]
-        public async Task<ActionResult<List<Todo.BLL.Todo>>> GetTodos([FromQuery] int? columnId)
-            => await TodoService.GetTodosAsync(columnId);
+        public async Task<ActionResult<List<Todo.BLL.Todo>>> GetTodos()
+            => await TodoService.GetTodosAsync();
 
         // GET api/<TodosController>/5
         [HttpGet("{id}")]

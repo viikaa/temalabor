@@ -85,7 +85,7 @@ namespace Todo.Test
         }
 
         [TestMethod]
-        public async Task GetColumnsWithData()
+        public async Task GetTodosWithData()
         {
             using (var testScope = TestWebAppFactory.Create())
             {
@@ -144,6 +144,368 @@ namespace Todo.Test
             }
         }
 
+        [TestMethod]
+        public async Task PostTodoWithId()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+
+                var response = await client.PostAsJsonAsync("/api/todos", 
+                    new BLL.Todo(
+                        4,
+                        "TestPost",
+                        "Desc",
+                        "2021-04-30T10:54",
+                        0, 
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PostTodoWithNegativePriority()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+
+                var response = await client.PostAsJsonAsync("/api/todos",
+                    new BLL.Todo(
+                        null,
+                        "TestPost",
+                        "Desc",
+                        "2021-04-30T10:54",
+                        -1,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PostTodoWithIncorrectDateFormat()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+
+                var response = await client.PostAsJsonAsync("/api/todos",
+                    new BLL.Todo(
+                        null,
+                        "TestPost",
+                        "Desc",
+                        "2021-04-30T10:54:00",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PostTodoToNotExistingColumn()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+
+                var response = await client.PostAsJsonAsync("/api/todos",
+                    new BLL.Todo(
+                        null,
+                        "TestPost",
+                        "Desc",
+                        "2021-04-30T10:54",
+                        0,
+                        3)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PostTodoWithNotUniqueTitle()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                var client = testScope.CreateClient();
+
+                var response = await client.PostAsJsonAsync("/api/todos",
+                    new BLL.Todo(
+                        null,
+                        "Todo1",
+                        "salala",
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.Conflict, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PostTodoSuccess()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                testScope.AddSeedEntities(TestColumns);
+                var client = testScope.CreateClient();
+
+                var response = await client.PostAsJsonAsync("/api/todos",
+                    new BLL.Todo(
+                        null,
+                        "Todo3",
+                        "salala",
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                var responseBody = await response.Content.ReadFromJsonAsync<BLL.Todo>();
+                var insertedTodo = testScope.GetDbTableContent<DAL.Todo>().Single(t => t.Id == responseBody.Id);
+
+                Assert.IsNotNull(response);
+                Assert.AreEqual(System.Net.HttpStatusCode.Created, response.StatusCode);
+                Assert.IsNotNull(responseBody);
+                Assert.AreEqual(insertedTodo, MapDtoToEntity(responseBody));
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoWithoutId()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                int queryId = 1;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        null,
+                        "TestPost",
+                        "Desc",
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoWithNotExistingId()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                int queryId = 4;
+                int todoId = queryId;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        "UpdatedTodo1",
+                        null,
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoWithNotMatchingIds()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                int queryId = 1;
+                int todoId = 2;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        "UpdatedTodo1",
+                        null,
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+
+        [TestMethod]
+        public async Task PutTodoWithNegativePriority()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                int queryId = 1;
+                int todoId = queryId;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        "UpdatedTodo1",
+                        null,
+                        "2021-04-30T10:54",
+                        -1,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoWithIncorrectDateFormat()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                int queryId = 1;
+                int todoId = queryId;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        "UpdatedTodo1",
+                        null,
+                        "2021-04-30T10:54:00",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoToNotExistingColumn()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                int queryId = 1;
+                int todoId = queryId;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        "UpdatedTodo1",
+                        null,
+                        "2021-04-30T10:54",
+                        0,
+                        3)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoWithNotUniqueTitle()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                int queryId = 1;
+                int todoId = queryId;
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        "Todo2",
+                        null,
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                Assert.AreEqual(System.Net.HttpStatusCode.Conflict, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutTodoSuccess()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                var client = testScope.CreateClient();
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                int queryId = 1;
+                int todoId = queryId;
+                string uniqueTitle = "UniqueTitle";
+
+                var response = await client.PutAsJsonAsync($"/api/todos/{queryId}",
+                    new BLL.Todo(
+                        todoId,
+                        uniqueTitle,
+                        null,
+                        "2021-04-30T10:54",
+                        0,
+                        1)
+                    );
+
+                var updatedTodo = testScope.GetDbTableContent<DAL.Todo>().Single(t => t.Id == todoId);
+
+                Assert.IsNotNull(response);
+                Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+                Assert.AreEqual(updatedTodo.Title, uniqueTitle);
+            }
+        }
+
+        [TestMethod]
+        public async Task DeleteNotExistingTodo()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                var client = testScope.CreateClient();
+
+                var response = await client.DeleteAsync("/api/todos/4");
+
+                Assert.IsNotNull(response);
+                Assert.AreEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task DeleteTodoSuccess()
+        {
+            using (var testScope = TestWebAppFactory.Create())
+            {
+                testScope.AddSeedEntities(TestColumns);
+                testScope.AddSeedEntities(TestTodos);
+                var client = testScope.CreateClient();
+
+                int id = 1;
+                var response = await client.DeleteAsync($"/api/todos/{id}");
+                var deletedColumn = testScope.GetDbTableContent<DAL.Todo>().SingleOrDefault(t => t.Id == id);
+
+                Assert.IsNotNull(response);
+                Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+                Assert.IsNull(deletedColumn);
+            }
+        }
 
     }
 }

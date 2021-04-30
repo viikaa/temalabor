@@ -240,7 +240,7 @@ namespace Todo.Test
         }
 
         [TestMethod]
-        public async Task DeleteSuccess()
+        public async Task DeleteColumnSuccess()
         {
             using (var testScope = TestWebAppFactory.Create())
             {
