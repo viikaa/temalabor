@@ -14,9 +14,7 @@ export default function TodoModal(props) {
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({}); 
-
-  //Szükséges, mivel a save button nem a form része, így azon hívva a save-et az event-ből nem kapnánk referenciát a formra => validáció eltörne
-  const formRef = useRef();
+  const formRef = useRef();//Szükséges, mivel a save button nem a form része, így azon hívva a save-et az event-ből nem kapnánk referenciát a formra => validáció eltörne
 
   useEffect(() => {
     if (props.id)
@@ -111,7 +109,6 @@ export default function TodoModal(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/*A teendők rendelkeznek címmel, leírással, határidővel és állapottal (függőben, folyamatban, kész, elhalasztva).*/}
           <Form ref={formRef} noValidate validated={validated} onSubmit={save}>
             <Form.Group as={Row} controlId='title'>
               <Form.Label column md='2'>

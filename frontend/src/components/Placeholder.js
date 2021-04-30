@@ -21,7 +21,6 @@ export default function Placeholder(props) {
         columnId={props.columnId ? props.columnId : 0}
       />
     );
-  //ESLint warning miatt így jobb
   else modal = <ColumnModal show={show} hide={handleClose} />;
 
   return (

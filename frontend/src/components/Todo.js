@@ -9,7 +9,6 @@ import TodoModal from './modals/TodoModal';
 export default function Todo(props) {
   const [state, dispatch] = useContext(DataContext);
   const [thisTodo, setThisTodo] = useState({});
-
   const [showTodoModal, setShowTodoModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
