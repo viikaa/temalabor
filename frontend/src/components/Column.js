@@ -40,7 +40,6 @@ export default function Column(props) {
     handleCloseDeleteModal();
     await deleteColumn(thisColumn.id);
     const newColumns = state.columns.filter((col) => col.id !== thisColumn.id);
-    //TODO: response státuszkódtól függjön, hogy mi történik
     dispatch({
       type: 'UPDATE_COLUMNS',
       payload: {
