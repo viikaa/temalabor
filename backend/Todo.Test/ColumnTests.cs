@@ -1,8 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Todo.DAL;
-using Todo.BLL;
 using System.Linq;
 
 namespace Todo.Test
