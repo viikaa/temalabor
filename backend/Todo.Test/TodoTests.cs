@@ -46,15 +46,6 @@ namespace Todo.Test
             }
         };
 
-        private static BLL.Todo MapEntityToDto(DAL.Todo entity)
-            => new BLL.Todo(
-                entity.Id,
-                entity.Title,
-                entity.Description,
-                entity.Deadline.ToString("yyyy-MM-ddTHH:mm", null),
-                entity.Priority,
-                entity.ColumnId);
-
         private static DAL.Todo MapDtoToEntity(BLL.Todo dto)
             => new DAL.Todo 
             {
