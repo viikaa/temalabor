@@ -152,7 +152,90 @@ Oszlop vagy teendő törlésekor megjelenő megerősítő modális ablak. A műk
 |`delete`|A ténylegest törlést végző függvény.|
 
 
-
-
 ## Backend
+Az alkalmazás szerveroldali része fogadja a klienstől érkező HTTP kéréseket, és objektum-relációs leképzést alkalmazva továbbítja egy Microsoft SQL Server adatbázis felé bizonyos üzleti logikai feladatok ellátása után.
+### Az alkalmazás szerveroldali architektúrája
+A kliens a szerverrel REST végpontokon kommunikál. Három rétegű architektúrára épült az alkalmazás szerveroldali része.
+#### API réteg
+Az API réteg definiálja a REST végpontokat, és a végpontok által elfogadott kéréseket, azok tulajdonságait. 
+#### BLL (Business Logic Layer)
+Ez a réteg alkalmazás üzleti logikai feladatait látja el. Az API rétegbe érkezett kérések validálása, és feldolgozása, azaz az adatbázisnak továbbküldés, vagy onnan történő adatlehívás a feladata.
+#### DAL (Data Access Layer)
+Az adatelérési réteg valósítja meg az objektum-relációs leképezést, és biztosítja az adatbáziskontextust az üzleti logikai réteg számára az adatbázissal történő kommunikáció céljából.
 
+### Az adatbázis által tárolt entitások
+#### Column
+|Attribútum|Mit tárol|Adattípus|
+|--|--|--|
+|Id|egy oszlop elsődleges kulcsa|`int`|
+|Title|egy oszlop neve|`nvarchar(MAX)`|
+
+#### Todo
+|Attribútum|Mit tárol|Adattípus|
+|--|--|--|
+|Id|egy teendő elsődleges kulcsa|`int`|
+|Title|egy teendő neve.|`nvarchar(MAX)`|
+|Description|teendő részletesebb leírása|`nvarchar(MAX)`|
+|Priority|teendő prioritása|`int`|
+|ColumnId|teendőt tartalmazó oszlop elsődleges kulcsa *idegen kulcs*ként|`int`|
+|Deadline|teendő elvégzésének határideje|`datetime2(7)`|
+
+### Az alkalmazást alkotó projektek felépítése
+#### Todo.API
+A réteg nem kezeli a valódi entitásoknak megfeleltetett osztálypéldányokat, csak az architektúrában eggyel "alsóbb" rétegben definiált DTO-k (*Data Transfer Object*) segítségével fogad, és küld adatokat.
+##### `Program.cs`
+Visual Studio által generált osztály, az alkalmazás belépési pontja.
+##### `Startup.cs`
+Visual Studio által generált osztály, az alkalmazás konfigurációját írja le. Hozzáadja a *dependency injection*-t kezelő rendszerbe az üzleti logikai réteg *service*-eit, konfigurálja az alkalmazás működéséhez szükséges *middleware*-eket.
+##### `ColumnsController.cs`
+A kontroller osztály a *dependency injection*-t kezelő rendszertől vár Egy `IColumnService` interfészt megvalósító osztálypéldányt, amin keresztül kommunikál az üzleti logikai réteggel. Az interfészt használó megoldás általi laza kapcsolat lehetővé teszi, hogy az osztály a függősége nélkül tesztelhető legyen.
+|HTTP ige|Végpont|Feladat|
+|--|--|--|
+|*GET*|api/columns|összes oszlop lekérése|
+|*GET*|api/columns/{id}|egyetlen oszlop lekérése|
+|*POST*|api/columns|új oszlop létrehozása|
+|*PUT*|api/columns/{id}|oszlop módosítása|
+|*DELETE*|api/columns/{id}|oszlop törlése|
+##### `TodosController.cs`
+A kontroller osztály a *dependency injection*-t kezelő rendszertől vár Egy `ITodosService` interfészt megvalósító osztálypéldányt, amin keresztül kommunikál az üzleti logikai réteggel. Az interfészt használó megoldás általi laza kapcsolat lehetővé teszi, hogy az osztály a függősége nélkül tesztelhető legyen.
+|HTTP ige|Végpont|Feladat|
+|--|--|--|
+|*GET*|api/columns|összes teendő lekérése|
+|*GET*|api/columns/{id}|egyetlen teendő lekérése|
+|*POST*|api/columns|új teendő létrehozása|
+|*PUT*|api/columns/{id}|teendő módosítása|
+|*DELETE*|api/columns/{id}|teendő törlése|
+#### Todo.BLL
+##### `ColumnsService.cs`
+Ebben a fájlban található az `IColumnService` interfész, ami *Column* entitásokkal kapcsolatos műveleteket definiál, és annak megvalósítása, a `ColumnService` osztály. Az osztály konstruktorában vár egy `TodoDbContext` példányt. Az osztály Entity Framework és LINQ segítségével írja és olvassa az adatbázist az adatelérési rétegben definiált adatbáziskontextuson keresztül.
+##### `TodosService.cs`
+Ebben a fájlban található az `ITodoService` interfész, ami *Todo* entitásokkal kapcsolatos műveleteket definiál, és annak megvalósítása, a `TodoService` osztály. Az osztály konstruktorában vár egy `TodoDbContext` példányt. Az osztály Entity Framework és LINQ segítségével írja és olvassa az adatbázist az adatelérési rétegben definiált adatbáziskontextuson keresztül.
+##### `DTO.cs`
+Ez a fájl tartalmazza C# recrd-ként az oszlopok és teendők adatainak hálózaton történő közlekedéséhez használt *Data Transfer Object*-eket.
+##### `DependencyInjectionExtensions.cs`
+*Extension* metódusokat definiál az `IServiceCollection` interfészhez, amiket az API réteg `Starup` osztálya hív meg annak érdekében, hogy a saját osztályok is injektálhatók legyenek.
+#### Todo.DAL
+##### `Todo.cs`
+A *Todo* entitást leképző osztály. Tartalmazza a a saját adatait tároló adatmezőket, illetve a *Column* entitással való kapcsolatot reprezentáló `ColumnId` külsőkulcsot tároló mezőt, és a `Column` navigációs mezőt. 
+##### `Column.cs`
+A *Column* entitást leképző osztály. Tartalmazza a a saját adatait tároló adatmezőket, illetve a *Todo* entitással való kapcsolatot reprezentáló `TodoId` külsőkulcsot tároló mezőt, és a `Todos` navigációs mezőt, ami az oszlophoz tartozó teendőket tárolja. 
+
+
+A két  modellosztályban a kapcsolat navigációs tulajdonsággal és elsődleges kulcsot tároló mezővel is reprezentálva van, ezáltal a kapcsolat teljesen definiált. Ennek köszönhetően oszlop törlésekor a hozzátartozó teendők is törlődnek.
+
+Ezen felül mindkét modell osztály implementálja az `IEquatable<T>` interfészt, ami lehetővé teszi oszlopok és teendők értékszerinti egyenlőség vizsgálatát. Ennekt tesztelés során van szerepe.
+##### `TodoDbContext.cs`
+Leszármazik az Entity Framework által rendelkezésre álló DbContext osztályból, és definiálja a két létrehozandó táblát. Az alkalmazás ezen az osztályon keresztül képes írni, olvasni az adatbázist.
+
+### Tesztek
+A *Todo.Test* projekt az alkalmazáshoz tartozó teszteket tartalmazza.
+#### `ColumnsControllerUnitTests.cs`
+A `ColuumnsController` osztályhoz tartozó unittestek.
+#### `MockColumnService.cs`
+`IColumnService` implementáció. Az oszlopokat kezelő kontrollert ezzel példányosítva, az annak valódi függősége nélkül tesztelhető.
+#### `ColumnTests.cs`
+Integrációs tesztek, melyek az alkalmazás mindhárom rétegét egyszerre tesztelik oszlopok kezelése szempontjából.
+#### `TodoTests.cs`
+Integrációs tesztek, melyek az alkalmazás mindhárom rétegét egyszerre tesztelik teendők kezelése szempontjából.
+#### `TestWebbAppFactory.cs` (nem saját)
+Az integrációs tesztekhez felhasznált osztály, ami a valós adatbázis helyett biztosít egySQLite adatbázist, és rajta keresztül HTTP kérések intézhetők az API réteg irányába.
